@@ -29,17 +29,27 @@ def login():
     """
     username = request.args.get("username")
     password = request.args.get("password")
-    account = cursor.execute(f'select * from [dbo].[UserAccount] where username= {username}')
+    #account = cursor.execute(f"select * from [dbo].[UserAccount] where username={username}")
     return json.dumps({'success': 'welcome to tweeter server!'})  
 
-
-
-@app.route("/GetAllUserAccounts", methods=['GET'])
-def GetAllUserAccounts():
+@app.route("/register", methods=['GET'])
+def register():
     """
-    http://127.0.0.1:5000/GetAllUserAccounts
+    http://127.0.0.1:5000/register?username=testuser3&password=suv78&email=dummymail@gmail.com
     """
-    return cursor.execute('select * from [dbo].[UserAccount]').fetchall()
+    username = request.args.get("username")
+    password = request.args.get("password")
+    email    = request.args.get("email")
+    """ f'insert into dbo.userAccount (username,password,email) values ({username},{password},{email}'
+    """
+    #cmd = "insert into dbo.UserAccount ([USER_NAME], [PASSWORD], Email) VALUES(" + username +"," + password +"," + email +")"
+    #cursor.execute("insert into dbo.UserAccount ([USER_NAME], [PASSWORD], Email) VALUES ('Testuser2', 'password', 'testEmai@gmail.com’) ")
+    account = cursor.execute("select * from [dbo].[UserAccount]")
+    print(account)
+    
+    if account is None:
+        return json.dumps({'success': 'false', 'message': 'Account Not Created'})
+    return json.dumps({'success': 'true', 'message': 'Account Succesfully Created!'})
 
 
 
